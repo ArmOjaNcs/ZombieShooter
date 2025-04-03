@@ -75,7 +75,7 @@ public class EnemySimpleMover : MonoBehaviour
 
         if(Physics.Raycast(_stepRayLower.position, transform.TransformDirection(Vector3.forward), out hitLower, _stepRayLength, _layerWithOutEnemy))
         {
-            if(Vector3.Angle(Vector3.up, hitLower.normal) <= 90)
+            if(Vector3.Angle(Vector3.up, hitLower.normal) == 90)
             {
                 RaycastHit hitUpper;
 
