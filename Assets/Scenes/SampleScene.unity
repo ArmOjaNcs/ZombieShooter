@@ -20243,6 +20243,7 @@ GameObject:
   - component: {fileID: 5682985957764147641}
   - component: {fileID: 5682985957764147643}
   - component: {fileID: 5682985957764147644}
+  - component: {fileID: 5682985957764147645}
   m_Layer: 10
   m_Name: Enemy (4)
   m_TagString: Untagged
@@ -20262,8 +20263,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d953007ebc3292540a8095d0b439e8f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 543450652153315659}
-  _speed: 1
+  _speed: 2
   _stepRayUpper: {fileID: 1214253263}
   _stepRayLower: {fileID: 1620453593}
   _stepUpperHeight: 0.3
@@ -20332,6 +20332,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _player: {fileID: 543450652153315659}
   _minDistance: 2
+--- !u!114 &5682985957764147645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5682985957764147640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2005447926645449d7ec363c60bd01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _simpleMover: {fileID: 5682985957764147641}
 --- !u!4 &5831550650570717495
 Transform:
   m_ObjectHideFlags: 0

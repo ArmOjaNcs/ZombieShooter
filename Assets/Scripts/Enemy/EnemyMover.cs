@@ -23,12 +23,12 @@ public class EnemyMover : MonoBehaviour
 
     private void OnEnable()
     {
-        _distanceTracker.DistanceIsMinimal += OnDistanceIsMinimal;
+        _distanceTracker.MinimalDistanceReached += OnDistanceIsMinimal;
     }
 
     private void OnDisable()
     {
-        _distanceTracker.DistanceIsMinimal -= OnDistanceIsMinimal;
+        _distanceTracker.MinimalDistanceReached -= OnDistanceIsMinimal;
     }
 
     private void Update()

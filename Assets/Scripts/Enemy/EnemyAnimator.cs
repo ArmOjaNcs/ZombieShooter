@@ -21,7 +21,7 @@ public class EnemyAnimator : MonoBehaviour
     private void OnDisable()
     {
         if(_distanceTracker != null)
-            _distanceTracker.DistanceIsMinimal -= OnDistanceIsMinimal;
+            _distanceTracker.MinimalDistanceReached -= OnDistanceIsMinimal;
     }
 
     public void Initialize()
@@ -29,7 +29,7 @@ public class EnemyAnimator : MonoBehaviour
         _animator = GetComponent<Animator>();
         _hipsBone = _animator.GetBoneTransform(HumanBodyBones.Hips);
         _distanceTracker = GetComponent<EnemyDistanceTracker>();
-        _distanceTracker.DistanceIsMinimal += OnDistanceIsMinimal;
+        _distanceTracker.MinimalDistanceReached += OnDistanceIsMinimal;
 
         AnimationClip[] currentClips = _animator.runtimeAnimatorController.animationClips;
         Transform[] bones = _hipsBone.GetComponentsInChildren<Transform>();

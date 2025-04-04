@@ -1,12 +1,14 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent (typeof(CapsuleCollider))]
+[RequireComponent(typeof(EnemyDistanceTracker))]
 public class EnemySimpleMover : MonoBehaviour
 {
     private const float StepSmooth = 0.1f;
     private const float MinStepRayLength = 0.2f;
 
-    [SerializeField] private Transform _player;
     [SerializeField] private float _speed;
     [SerializeField] private Transform _stepRayUpper;
     [SerializeField] private Transform _stepRayLower;
@@ -16,18 +18,18 @@ public class EnemySimpleMover : MonoBehaviour
     private Rigidbody _rigidbody;
     private CapsuleCollider _collider;
     private EnemyDistanceTracker _distanceTracker;
-    private Animator _animator;
     private Vector3 _moveDirection;
     private LayerMask _layerWithOutEnemy;
     private float _stepRayLength;
     private bool _isMinimalDistance;
 
+    public event Action<bool> IsRunning;
+
     private void Awake()
     {
-        LayerMask enemyLayer = 1 << 10;
+        LayerMask enemyLayer = 1 << GameUtils.EnemyLayer;
         _layerWithOutEnemy = ~ enemyLayer;
         _rigidbody = GetComponent<Rigidbody>();
-        _animator = GetComponent<Animator>();
         _collider = GetComponent<CapsuleCollider>();
         _distanceTracker = GetComponent<EnemyDistanceTracker>();
         _stepRayUpper.localPosition = new Vector3(0, _stepUpperHeight * _collider.height, 0);
@@ -37,12 +39,12 @@ public class EnemySimpleMover : MonoBehaviour
 
     private void OnEnable()
     {
-        _distanceTracker.DistanceIsMinimal += OnDistanceIsMinimal;
+        _distanceTracker.MinimalDistanceReached += OnDistanceIsMinimal;
     }
 
     private void OnDisable()
     {
-        _distanceTracker.DistanceIsMinimal -= OnDistanceIsMinimal;
+        _distanceTracker.MinimalDistanceReached -= OnDistanceIsMinimal;
     }
 
     private void Update()
@@ -53,19 +55,18 @@ public class EnemySimpleMover : MonoBehaviour
     private void FixedUpdate()
     {
         _moveDirection = transform.TransformDirection(Vector3.forward);
-        _moveDirection = new Vector3(_moveDirection.x, _rigidbody.linearVelocity.y, _moveDirection.z) * _speed;
+        _moveDirection *= _speed;
+        _moveDirection = new Vector3(_moveDirection.x, _rigidbody.linearVelocity.y, _moveDirection.z);
 
         if (_isMinimalDistance == false)
         {
             HandleClimbing();
             _rigidbody.linearVelocity = _moveDirection;
-            _animator.SetBool(GameUtils.Running, true);
-            _animator.SetBool(GameUtils.Idle, false);
+            IsRunning?.Invoke(true);
         }
         else
         {
-            _animator.SetBool(GameUtils.Running, false);
-            _animator.SetBool(GameUtils.Idle, true);
+            IsRunning?.Invoke(false);
         }
     }
 
@@ -75,7 +76,7 @@ public class EnemySimpleMover : MonoBehaviour
 
         if(Physics.Raycast(_stepRayLower.position, transform.TransformDirection(Vector3.forward), out hitLower, _stepRayLength, _layerWithOutEnemy))
         {
-            if(Vector3.Angle(Vector3.up, hitLower.normal) == 90)
+            if(Vector3.Angle(Vector3.up, hitLower.normal) == GameUtils.StraightAngle)
             {
                 RaycastHit hitUpper;
 
@@ -88,7 +89,7 @@ public class EnemySimpleMover : MonoBehaviour
 
     private void LookAtPlayer()
     {
-        Vector3 lookPosition = _player.position;
+        Vector3 lookPosition = _distanceTracker.Player.position;
         lookPosition.y = transform.position.y;
         transform.LookAt(lookPosition);
     }

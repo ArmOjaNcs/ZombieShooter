@@ -2,7 +2,9 @@ public static class GameUtils
 {
     public static readonly int StartExtraAmmo = 2000;
     public static readonly int StickmanLayer = 3;
+    public static readonly int EnemyLayer = 10;
     public static readonly int PlayerAnimatorArmsLayer = 2;
+    public static readonly float StraightAngle = 90;
     public static readonly float MinDistanceFromNormal = 0.01f;
     public static readonly float BulletForceForRigidbody = 50;
     public static readonly float UnfoldedAngle = 180;
